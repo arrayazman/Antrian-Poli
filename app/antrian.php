@@ -1,5 +1,7 @@
 <?php
-require_once('conf/conf.php');
+require_once('../conf/conf.php');
+date_default_timezone_set('Asia/Jakarta');
+
  
 if(isset($_GET['p'])) {	 
 switch($_GET['p']){	
@@ -70,6 +72,7 @@ break;
 
 case 'poli' :   
 $tanggal=date('Y-m-d');
+$jam=date('H:i:s');
 $hari=getOne("select DAYNAME(current_date())");
 $namahari="";
 if($hari=="Sunday"){
@@ -90,12 +93,16 @@ if($hari=="Sunday"){
 // Menginisialisasi array data di luar loop
 $data = array();
 
-$_sql = "SELECT dokter.nm_dokter, poliklinik.nm_poli, jadwal.jam_mulai, jadwal.jam_selesai, poliklinik.kd_poli, dokter.kd_dokter
+$_sql = "SELECT dokter.nm_dokter, poliklinik.nm_poli, jadwal.jam_mulai,jadwal.jam_selesai, poliklinik.kd_poli, dokter.kd_dokter
 FROM jadwal
 INNER JOIN dokter ON dokter.kd_dokter = jadwal.kd_dokter
 INNER JOIN poliklinik ON jadwal.kd_poli = poliklinik.kd_poli
-WHERE poliklinik.kd_poli NOT IN ('H', 'PRAD', 'IGDk','PU') and jadwal.hari_kerja = '$namahari' 
-GROUP BY poliklinik.kd_poli,dokter.kd_dokter";
+WHERE poliklinik.kd_poli NOT IN ('RAD', 'FAR', 'IGDK', 'PAR', 'IRM', 'OBG', 'PONEK', 'LAB', 'U017', 'FIS') and jadwal.hari_kerja = '$namahari' 
+AND CURTIME() BETWEEN  jadwal.jam_mulai + INTERVAL -30 MINUTE and jadwal.jam_selesai + INTERVAL + 30 MINUTE
+GROUP BY jadwal.kd_poli,dokter.kd_dokter";
+
+// silahkan sesuaikan 
+// -- WHERE poliklinik.kd_poli NOT IN ('H', 'PRAD', 'IGDk','PU') and jadwal.jam_selesai>'$jam' and jadwal.hari_kerja = '$namahari' 
 $hasil = bukaquery($_sql);
 
 while ($r = mysqli_fetch_array($hasil)) {

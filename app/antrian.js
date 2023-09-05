@@ -3,7 +3,7 @@
     // Menampilkan data rumah sakit
     $(document).ready(function() { 
       $.ajax({
-          url: 'antrian.php?p=pengaturan',
+          url: 'app/antrian.php?p=pengaturan',
           type: 'GET',
           dataType: 'json',
           success: function(data) {
@@ -20,11 +20,29 @@
       });
   });
   
-  //=========================================================================
+//==================pengaturan video ===============
+// Mengambil elemen video
+var video = document.getElementById("myVideo");
+// Mengatur volume ke 20%
+video.volume = 0.2;
+// Mengatur Mute Video
+video.muted = false;
+// Menetapkan sumber video
+//video.src = 'video/display.mp4'; //untuk video lokal
+video.src = 'https://res.cloudinary.com/dukkvuaqi/video/upload/v1693932345/Jadwal_RSU_f8inll.mp4';
+
+// Menetapkan poster video
+video.poster = 'https://res.cloudinary.com/dukkvuaqi/image/upload/v1693911405/pxfuel_azx7p1.jpg';
+// Memastikan video dimuat ulang setelah mengubah sumber dan poster
+
+video.load();
+// Anda dapat memulai video jika Anda ingin memutar otomatis
+video.play();
+//=========================================================================
       // Fungsi pemanggil
       function Suara() {
           $.ajax({
-            url: "antrian.php?p=panggil",
+            url: "app/antrian.php?p=panggil",
             type: "GET",
             dataType: "json",
             success: function(data) {
@@ -37,7 +55,7 @@
       //==display poli== 
       function datapoli() {
         $.ajax({
-            url: "antrian.php?p=poli",
+            url: "app/antrian.php?p=poli",
             type: "GET",
             dataType: "json",
             success: function(data) {
@@ -73,7 +91,7 @@
       // Fungsi display nomor
       function DisplayNomor() {
         $.ajax({
-            url: "antrian.php?p=nomor",
+            url: "app/antrian.php?p=nomor",
             type: "GET",
             dataType: "json",
             success: function(data) {
@@ -153,13 +171,6 @@
   setInterval(updateClock, 1000);
    
    
-  //==================pengaturan video ===============
-    // Mengambil elemen video
-    var video = document.getElementById("myVideo");
-    // Mengatur volume ke 40%
-    video.volume = 0.2;
-    video.muted = false;
-  //==================================================
   
   
    

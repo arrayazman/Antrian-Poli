@@ -32,7 +32,7 @@ video.muted = false;
 video.src = 'https://res.cloudinary.com/dukkvuaqi/video/upload/v1693932345/Jadwal_RSU_f8inll.mp4';
 
 // Menetapkan poster video
-video.poster = 'https://res.cloudinary.com/dukkvuaqi/image/upload/v1693911405/pxfuel_azx7p1.jpg';
+video.poster = 'assets/poster.jpg';
 // Memastikan video dimuat ulang setelah mengubah sumber dan poster
 
 video.load();
@@ -49,74 +49,7 @@ video.play();
               var nomorAntrian = $("#suara");
               nomorAntrian.empty();
         
-              $.each(data, function(index, item) {
-           
-  //========================================================================
-      //==display poli== 
-      function datapoli() {
-        $.ajax({
-            url: "app/antrian.php?p=poli",
-            type: "GET",
-            dataType: "json",
-            success: function(data) {
-                var swiperWrapper = $("#datapoli");
-                swiperWrapper.empty();
-    
-                // Loop melalui data dan tambahkan slide
-                $.each(data, function(index, item) {
-                    var varpoli = $("<div class='col-lg-3 text-center '>"+
-                                    "<div class='card pt-2 border border-success'>"+
-                                    "<h5>" + item.nm_poli + "</h5><b>" + item.nm_dokter + "</b><br><p class='pasien'>");
-                                   
-                                   $.each(item.data_pasien, function(index, pasien) {
-                        var antrian_pasien = $("<h2>" + pasien.kd_poli + pasien.no_reg + "</h2>"+
-                        "<h5>" + pasien.nm_pasien + "</h5>");
-                        varpoli.find('.pasien').append(antrian_pasien);
-                    });  
-                    varpoli.append("</p></div></div>");  
-                    swiperWrapper.append(varpoli);
-                });
-            }, 
-        });
-    }
-
-    // Memanggil fungsi displaypoli() saat halaman pertama kali dimuat
-    $(document).ready(function() {
-        datapoli();
-    });
-  
-  //=======================================================================
-     
-  //=======================================================================
-      // Fungsi display nomor
-      function DisplayNomor() {
-        $.ajax({
-            url: "app/antrian.php?p=nomor",
-            type: "GET",
-            dataType: "json",
-            success: function(data) {
-                var nomorAntrian = $("#nomor");
-                nomorAntrian.empty(); 
-                // Mengosongkan data sebelum menambahkan yang baru
-                // Loop melalui data dan menambahkannya ke tampilan
-                $.each(data, function(index, item) {
-                    var antrian = $("<h2 >" + item.nm_pasien + "</h2><br>"+
-                        "<h1 class='display-3'>" + item.kd_poli + item.no_reg + "</h1><br>"+
-                        "<b class='h3'>" + item.nm_poli + "</b><br><b class='h4'>" + item.nm_dokter + "</b>"); 
-                    nomorAntrian.append(antrian);
-
-                });
-            }, 
-        });
-    }
-    
-    // Memanggil DisplayNomor() saat halaman pertama kali dimuat
-    $(document).ready(function() {
-        DisplayNomor();
-    });
-  //========================================================================
-  
-  
+              $.each(data, function(index, item) {  
                 // Suara notifikasi pemanggilan antrian
                 var audio = document.getElementById("myAudio");
                 audio.onended = function() {
@@ -137,18 +70,75 @@ video.play();
               });
             },
           });
-        }
+
+
+             
+ //========================================================================
+      //==display poli== 
+ 
+        $.ajax({
+          url: "app/antrian.php?p=poli",
+          type: "GET",
+          dataType: "json",
+          success: function(data) {
+              var swiperWrapper = $("#datapoli");
+              swiperWrapper.empty();
   
+              // Loop melalui data dan tambahkan slide
+              $.each(data, function(index, item) {
+                  var varpoli = $("<div class='col-lg-3 text-center '>"+
+                                  "<div class='card pt-2 border border-success'>"+
+                                  "<h5>" + item.nm_poli + "</h5><b>" + item.nm_dokter + "</b><br><p class='pasien'>");
+                                 
+                                 $.each(item.data_pasien, function(index, pasien) {
+                      var antrian_pasien = $("<h2>" + pasien.kd_poli + pasien.no_reg + "</h2>"+
+                      "<h5>" + pasien.nm_pasien + "</h5>");
+                      varpoli.find('.pasien').append(antrian_pasien);
+                  });  
+                  varpoli.append("</p></div></div>");  
+                  swiperWrapper.append(varpoli);
+              });
+          }, 
+      });
   
-  
+
+//=======================================================================
+   
+//=======================================================================
+    // Fungsi display nomor
+
+      $.ajax({
+          url: "app/antrian.php?p=nomor",
+          type: "GET",
+          dataType: "json",
+          success: function(data) {
+              var nomorAntrian = $("#nomor");
+              nomorAntrian.empty(); 
+              // Mengosongkan data sebelum menambahkan yang baru
+              // Loop melalui data dan menambahkannya ke tampilan
+              $.each(data, function(index, item) {
+                  var antrian = $("<h2 >" + item.nm_pasien + "</h2><br>"+
+                      "<h1 class='display-3'>" + item.kd_poli + item.no_reg + "</h1><br>"+
+                      "<b class='h3'>" + item.nm_poli + "</b><br><b class='h4'>" + item.nm_dokter + "</b>"); 
+                  nomorAntrian.append(antrian);
+
+              });
+          }, 
+      });
+//=========================================================================
+
+
+
+}  
       //refresh otomatis setiap 5 detik
       setInterval(Suara, 5000); 
       $(document).ready(function() {
           Suara();
-      });
+});
     
    //=======================================================================
-      
+   
+
   //==========membuat jam=============
    function updateClock() {
     var currentTime = new Date();

@@ -4,7 +4,15 @@ date_default_timezone_set('Asia/Jakarta');
 
  
 if(isset($_GET['p'])) {	 
+
+//kode poli yang ingin ditampilkan
+$poli="'ANA', 'GIG', 'IGDk'";
+//jam reset antrian
+$jamreset='09:48:00';
+
+  
 switch($_GET['p']){	
+
    
    case 'pengaturan':
    $_sql ="select nama_instansi,email from setting";
@@ -20,7 +28,8 @@ switch($_GET['p']){
 
    
    case 'panggil' :
-    
+     
+
       $_sql="SELECT a.no_rawat,b.no_reg, a.status, d.nm_poli,c.nm_pasien,a.kd_dokter,e.nm_dokter FROM antripoli a
   INNER JOIN
       reg_periksa b ON a.no_rawat = b.no_rawat
@@ -30,7 +39,7 @@ switch($_GET['p']){
       poliklinik d ON a.kd_poli = d.kd_poli
   INNER JOIN
       dokter e ON a.kd_dokter = e.kd_dokter
-WHERE d.kd_poli NOT IN ('H', 'PRAD', 'IGDk','PU') and a.status = '1' LIMIT 1";  
+WHERE d.kd_poli IN ($poli) and a.status = '1' LIMIT 1";  
 
       $hasil=bukaquery($_sql);
       $data = array();
@@ -49,7 +58,9 @@ WHERE d.kd_poli NOT IN ('H', 'PRAD', 'IGDk','PU') and a.status = '1' LIMIT 1";
      break;	
      
      
-case 'nomor' :            
+case 'nomor' :    
+
+
  $_sql="SELECT b.no_reg, a.status, d.nm_poli, c.nm_pasien, a.no_rawat, a.kd_dokter, e.nm_dokter, b.kd_poli FROM antripoli a
 INNER JOIN
  reg_periksa b ON a.no_rawat = b.no_rawat
@@ -59,20 +70,38 @@ INNER JOIN
  poliklinik d ON b.kd_poli = d.kd_poli
 INNER JOIN
  dokter e ON b.kd_dokter = e.kd_dokter
-WHERE d.kd_poli NOT IN ('H', 'PRAD', 'IGDk','PU') and  a.status < '3' AND a.status > '0' LIMIT 1";  
+WHERE d.kd_poli IN ($poli) and  a.status < '3' AND a.status > '0' LIMIT 1";  
  $hasil=bukaquery($_sql);
  $data = array();
- while ($r = mysqli_fetch_array ($hasil)){
-    $data[] = $r; 
- } 
+ 
+if(mysqli_num_rows($hasil)>0) {
+  while ($row = mysqli_fetch_array($hasil)) {
+      $data[] = $row;
+  }
+} else {
+ $row['kd_poli']='';
+ $row['no_reg']='000';
+ $row['nm_pasien']='-';
+ $row['nm_dokter']='-';
+ $row['nm_poli']='-';
+ $data[] = $row;
+
+}
  echo json_encode($data); 
 break;	
 
 
 
-case 'poli' :   
+case 'poli' :  
 $tanggal=date('Y-m-d');
 $jam=date('H:i:s');
+
+// query hapus atau reset data
+if($jam>$jamreset){
+  bukaquery2("delete from antripoli");
+}
+
+
 $hari=getOne("select DAYNAME(current_date())");
 $namahari="";
 if($hari=="Sunday"){
@@ -97,12 +126,10 @@ $_sql = "SELECT dokter.nm_dokter, poliklinik.nm_poli, jadwal.jam_mulai,jadwal.ja
 FROM jadwal
 INNER JOIN dokter ON dokter.kd_dokter = jadwal.kd_dokter
 INNER JOIN poliklinik ON jadwal.kd_poli = poliklinik.kd_poli
-WHERE poliklinik.kd_poli NOT IN ('RAD', 'FAR', 'IGDK', 'PAR', 'IRM', 'OBG', 'PONEK', 'LAB', 'U017', 'FIS') and jadwal.hari_kerja = '$namahari' 
+WHERE poliklinik.kd_poli IN ($poli) and jadwal.hari_kerja = '$namahari' 
 AND CURTIME() BETWEEN  jadwal.jam_mulai + INTERVAL -30 MINUTE and jadwal.jam_selesai + INTERVAL + 30 MINUTE
+-- WHERE poliklinik.kd_poli NOT IN ('H', 'PRAD', 'IGDk','PU') and jadwal.jam_selesai>'$jam' and jadwal.hari_kerja = '$namahari' 
 GROUP BY jadwal.kd_poli,dokter.kd_dokter";
-
-// silahkan sesuaikan 
-// -- WHERE poliklinik.kd_poli NOT IN ('H', 'PRAD', 'IGDk','PU') and jadwal.jam_selesai>'$jam' and jadwal.hari_kerja = '$namahari' 
 $hasil = bukaquery($_sql);
 
 while ($r = mysqli_fetch_array($hasil)) {

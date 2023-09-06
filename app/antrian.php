@@ -8,7 +8,7 @@ if(isset($_GET['p'])) {
 //kode poli yang ingin ditampilkan
 $poli="'ANA', 'GIG', 'IGDk'";
 //jam reset antrian
-$jamreset='09:48:00';
+$jamreset='23:00:00';
 
   
 switch($_GET['p']){	

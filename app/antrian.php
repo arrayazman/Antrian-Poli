@@ -6,7 +6,7 @@ date_default_timezone_set('Asia/Jakarta');
 if(isset($_GET['p'])) {	 
 
 //kode poli yang ingin ditampilkan
-$poli="'ANA', 'GIG', 'IGDk'";
+$poli="'ANA', 'GIG', 'IGDk','INT'";
 //jam reset antrian
 $jamreset='23:00:00';
 
@@ -46,9 +46,14 @@ WHERE d.kd_poli IN ($poli) and a.status = '1' LIMIT 1";
       while ($r = mysqli_fetch_array ($hasil)){
         
       //tambahkan lagi yang ingin di replace    
-      $awal = array("Tn.", "By.", "Ny.");
-      $replace = array("Tuan ", "Bayi ", "Nyonya ");
-      $r['nm_pasien']=str_replace($awal,$replace,$r['nm_pasien']);      
+      $awalnama = array("Tn.", "By.", "Ny.");
+      $replacenama = array("Tuan ", "Bayi ", "Nyonya ");
+
+      $awalpoli= array("THT");
+      $replacepoli= array("T H T");
+      
+      $r['nm_poli']=str_replace($awalpoli,$replacepoli,$r['nm_poli']);      
+      $r['nm_pasien']=str_replace($awalnama,$replacenama,$r['nm_pasien']);      
       $data[] = $r;
       
       bukaquery2("UPDATE antripoli SET status = '3' WHERE status='2'");

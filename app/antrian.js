@@ -20,24 +20,32 @@
       });
   });
   
-//==================pengaturan video ===============
-// Mengambil elemen video
-var video = document.getElementById("myVideo");
-// Mengatur volume ke 20%
-video.volume = 0.2;
-// Mengatur Mute Video
-video.muted = false;
-// Menetapkan sumber video
-//video.src = 'video/display.mp4'; //untuk video lokal
-video.src = 'https://res.cloudinary.com/dukkvuaqi/video/upload/v1693932345/Jadwal_RSU_f8inll.mp4';
+// //==================pengaturan video ===============
+const videoPlayer = document.getElementById('myVideo');
+// ganti path video , bisa juga menggunakan url video
+const videos = ['video/vid-1.mp4', 'video/vid-2.mp4', 'video/vid-3.mp4', 'video/vid-4.mp4', 'video/vid-5.mp4', 'video/vid-6.mp4', 'video/vid-7.mp4', 'video/vid-8.mp4', 'video/vid-9.mp4']; 
+        // Ganti dengan daftar video yang Anda inginkan
+        let currentVideoIndex = 0;
+        // Fungsi untuk mengatur video pertama sebagai sumber awal
+        function setInitialVideo() {
+            videoPlayer.src = videos[currentVideoIndex];
+        }
+    
+        // Event listener saat video selesai diputar
+        videoPlayer.addEventListener('ended', () => {
+            currentVideoIndex = (currentVideoIndex + 1) % videos.length;
+            videoPlayer.src = videos[currentVideoIndex];
+            videoPlayer.play();
+        });
+        // // Mengatur volume ke 20%
+        videoPlayer.volume = 0.1;
+        // // Mengatur Mute Video
+        videoPlayer.muted = false;
+        videoPlayer.poster = 'video/poster.jpg';
+    
+        // Panggil fungsi untuk mengatur video pertama saat halaman dimuat
+        setInitialVideo();
 
-// Menetapkan poster video
-video.poster = 'assets/poster.jpg';
-// Memastikan video dimuat ulang setelah mengubah sumber dan poster
-
-video.load();
-// Anda dapat memulai video jika Anda ingin memutar otomatis
-video.play();
 //=========================================================================
       // Fungsi pemanggil
       function Suara() {
@@ -131,7 +139,7 @@ video.play();
 
 }  
       //refresh otomatis setiap 5 detik
-      setInterval(Suara, 5000); 
+      setInterval(Suara, 750); 
       $(document).ready(function() {
           Suara();
 });

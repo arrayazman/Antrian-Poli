@@ -6,7 +6,7 @@ date_default_timezone_set('Asia/Jakarta');
 if(isset($_GET['p'])) {	 
 
 //kode poli yang ingin ditampilkan
-$poli="'ANA', 'GIG', 'IGDk','INT'";
+$poli="'ANA','IGDk','INT'";
 //jam reset antrian
 $jamreset='23:00:00';
 
@@ -56,8 +56,8 @@ WHERE d.kd_poli IN ($poli) and a.status = '1' LIMIT 1";
       $r['nm_pasien']=str_replace($awalnama,$replacenama,$r['nm_pasien']);      
       $data[] = $r;
       
-      bukaquery2("UPDATE antripoli SET status = '3' WHERE status='2'");
-      bukaquery2("UPDATE antripoli SET status = '2' WHERE no_rawat = '$r[no_rawat]'");
+      bukaquery2("UPDATE antripoli SET status = '3' WHERE status='2' and kd_poli IN ($poli) ");
+      bukaquery2("UPDATE antripoli SET status = '2' WHERE no_rawat = '$r[no_rawat]' and kd_poli IN ($poli)");
       } 
       echo json_encode($data);
      break;	

@@ -1,4 +1,5 @@
 
+function pengaturan() {
 //=========================================================================
     // Menampilkan data rumah sakit
     $(document).ready(function() { 
@@ -46,6 +47,11 @@ const videos = ['video/vid-1.mp4', 'video/vid-2.mp4', 'video/vid-3.mp4', 'video/
         // Panggil fungsi untuk mengatur video pertama saat halaman dimuat
         setInitialVideo();
 
+
+      }
+$(document).ready(function() {
+        pengaturan();
+});      
 //=========================================================================
       // Fungsi pemanggil
       function Suara() {

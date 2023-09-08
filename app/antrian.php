@@ -6,7 +6,7 @@ date_default_timezone_set('Asia/Jakarta');
 if(isset($_GET['p'])) {	 
 
 //kode poli yang ingin ditampilkan
-$poli="'ANA','IGDk','INT'";
+$poli="'ANA','GIG','IGDk','INT'";
 //jam reset antrian
 $jamreset='23:00:00';
 

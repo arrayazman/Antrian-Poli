@@ -1,3 +1,5 @@
+[Traktir Kopi Gan !!](https://sociabuzz.com/arrayazman/tribe)
+
 # Antrian-Poli
 Antrian Poli Klinik
 Sudah menggunakan text to speech menggunakan librari dari responsivevoice.js

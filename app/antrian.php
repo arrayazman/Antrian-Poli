@@ -6,9 +6,10 @@ date_default_timezone_set('Asia/Jakarta');
 if(isset($_GET['p'])) {	 
 
 //kode poli yang ingin ditampilkan
-$poli="'ANA','GIG','IGDk','INT'";
+$poli="'ANA', 'PG', 'OBG','INT','BED'";
 //jam reset antrian
 $jamreset='23:00:00';
+
 
   
 switch($_GET['p']){	
@@ -28,9 +29,71 @@ switch($_GET['p']){
 
    
    case 'panggil' :
-     
 
-      $_sql="SELECT a.no_rawat,b.no_reg, a.status, d.nm_poli,c.nm_pasien,a.kd_dokter,e.nm_dokter FROM antripoli a
+    
+  $_sql1="SELECT * from antriadmisi WHERE status = '1' and jenis='kasir' order by waktu asc";  
+  $hasil1=bukaquery($_sql1); 
+
+  $_sql2="SELECT * from antriadmisi WHERE status = '1' and jenis='loket' order by waktu asc";  
+  $hasil2=bukaquery($_sql2); 
+
+  
+  if(mysqli_num_rows($hasil1)>0){
+
+    $_sql="SELECT a.norm,a.status,b.nm_pasien,a.kd_loket,concat(a.jenis) as nm_poli FROM antriadmisi a
+    INNER JOIN 
+        pasien b ON a.norm = b.no_rkm_medis
+  WHERE a.status = '1' order by a.waktu asc LIMIT 1";  
+  
+        $hasil=bukaquery($_sql);
+        $data = array();
+        while ($r = mysqli_fetch_array ($hasil)){
+          
+        //tambahkan lagi yang ingin di replace    
+        $awalnama = array("Tn.", "BY.", "Ny.");
+        $replacenama = array("Tuan ", "Bayi ", "Nyonya ");
+  
+        $awalpoli= array("THT");
+        $replacepoli= array("T H T");
+        
+        $r['nm_poli']=str_replace($awalpoli,$replacepoli,$r['nm_poli']);      
+        $r['nm_pasien']=str_replace($awalnama,$replacenama,$r['nm_pasien']);      
+        $data[] = $r;
+        
+        bukaquery2("UPDATE antriadmisi SET status = '3' WHERE status='2'");
+        bukaquery2("UPDATE antriadmisi SET status = '2' WHERE norm = '$r[norm]' and kd_loket='$r[kd_loket]' ");
+        } 
+        echo json_encode($data);
+
+         } else if(mysqli_num_rows($hasil2)>0){
+       
+           $_sql="SELECT a.norm,a.status,b.nm_pasien,a.kd_loket,a.jenis as nm_poli,a.kd_loket FROM antriadmisi a
+           INNER JOIN 
+               pasien b ON a.norm = b.no_rkm_medis
+         WHERE a.status = '1' order by a.waktu asc LIMIT 1";  
+         
+               $hasil=bukaquery($_sql);
+               $data = array();
+               while ($r = mysqli_fetch_array ($hasil)){
+                 
+               //tambahkan lagi yang ingin di replace    
+               $awalnama = array("Tn.", "BY.", "Ny.");
+               $replacenama = array("Tuan ", "Bayi ", "Nyonya ");
+         
+               $awalpoli= array("THT");
+               $replacepoli= array("T H T");
+               
+               $r['nm_poli']=str_replace($awalpoli,$replacepoli,$r['nm_poli']);      
+               $r['nm_pasien']=str_replace($awalnama,$replacenama,$r['nm_pasien']);      
+               $data[] = $r;
+               
+               bukaquery2("UPDATE antriadmisi SET status = '3' WHERE status='2'");
+               bukaquery2("UPDATE antriadmisi SET status = '2' WHERE norm = '$r[norm]' and kd_loket='$r[kd_loket]' ");
+               } 
+               echo json_encode($data);
+       
+                } else {
+$_sql="SELECT a.no_rawat,b.no_reg, a.status, d.nm_poli,c.nm_pasien,a.kd_dokter,e.nm_dokter FROM antripoli a
   INNER JOIN
       reg_periksa b ON a.no_rawat = b.no_rawat
   INNER JOIN
@@ -60,8 +123,15 @@ WHERE d.kd_poli IN ($poli) and a.status = '1' LIMIT 1";
       bukaquery2("UPDATE antripoli SET status = '2' WHERE no_rawat = '$r[no_rawat]' and kd_poli IN ($poli)");
       } 
       echo json_encode($data);
+
+    }
+
      break;	
      
+
+
+
+
      
 case 'nomor' :    
 

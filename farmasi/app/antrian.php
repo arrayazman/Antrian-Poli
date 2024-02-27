@@ -91,10 +91,8 @@ switch($_GET['p']){
       bukaquery2("UPDATE antriapotek3 SET status = '3' WHERE status='2'");
       bukaquery2("UPDATE antriapotek3 SET status = '2' WHERE no_rawat = '$r[no_rawat]'");
       }
-     } else {
-        $row['status']='0';
-        $data[] = $row;
-      } 
+     } 
+      
       echo json_encode($data);
 
 break;	

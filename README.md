@@ -19,7 +19,9 @@ CREATE TABLE `antriadmisi`  (
 
 Donasi Untuk Pengembangan :
 
-BANK : BCA 
+BANK : BCA
+
 a/n  : MUHAMMAD NURYAHYA 
+
 REK  : 6695446563
 

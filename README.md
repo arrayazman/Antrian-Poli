@@ -1,4 +1,4 @@
-[Traktir Kopi Gan !!](https://sociabuzz.com/arrayazman/tribe)
+
 
 # Antrian-Poli
 Antrian Poli Klinik
@@ -15,4 +15,11 @@ CREATE TABLE `antriadmisi`  (
   `norm` varchar(17) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `waktu` datetime NULL DEFAULT NULL
 ) ENGINE = MyISAM CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
+
+
+Donasi Untuk Pengembangan :
+
+BANK : BCA 
+a/n  : MUHAMMAD NURYAHYA 
+REK  : 6695446563
 

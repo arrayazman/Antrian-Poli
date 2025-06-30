@@ -1,4 +1,3 @@
-[Traktir Kopi Gan !!](https://sociabuzz.com/arrayazman/tribe)
 
 # Antrian-Poli
 Antrian Poli Klinik
